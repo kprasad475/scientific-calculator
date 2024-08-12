@@ -30,11 +30,19 @@ export class CalculatorComponent {
 
   calculate() {
     try {
-      this.displayValue = eval(this.displayValue.replace('sin', 'Math.sin')
-        .replace('cos', 'Math.cos')
-        .replace('tan', 'Math.tan'));
+      this.displayValue = this.evaluateExpression(this.displayValue);
     } catch (e) {
       this.displayValue = 'Error';
     }
+  }
+
+  evaluateExpression(expr: string): string {
+    // Replace mathematical functions with Math object functions
+    expr = expr.replace(/sin/g, 'Math.sin')
+               .replace(/cos/g, 'Math.cos')
+               .replace(/tan/g, 'Math.tan');
+    
+    // Use Function constructor to safely evaluate the expression
+    return Function('"use strict";return (' + expr + ')')();
   }
 }
